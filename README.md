@@ -1,3 +1,6 @@
+![](https://img.shields.io/badge/python-3.7.4-informational)
+![](https://img.shields.io/badge/vk__api-11.8.0-informational)
+
 # vktoolkit
 Набор скриптов для получения информации из Вконтакте.
 

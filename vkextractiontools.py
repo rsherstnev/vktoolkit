@@ -1,7 +1,8 @@
 # Скрипт позволяет извлекать некоторые данные из профилей Вконтакте в обход их настроек приватности.
 
-import os
 import argparse
+import os
+from getpass import getpass
 import vk_api
 
 from vkextractor import VKExtractor
@@ -40,7 +41,7 @@ def main():
                                'из под которой будут осуществляться запросы к API VK: ')
 
         if args.login is not None and args.password is None:
-            args.password = input('Введите пароль от учетной записи Вконтакте с логином ' + args.login + ": ")
+            args.password = getpass(prompt='Введите пароль от учетной записи Вконтакте с логином ' + args.login + ': ')
 
         if args.id is None:
             args.id = input('Введите ID пользователя, чьи данные будут извлекаться,'

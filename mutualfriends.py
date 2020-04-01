@@ -2,8 +2,9 @@
 # Данный скрипт позволяет узнать общих друзей 2 и более профилей ВК.
 # При этом не обязательно наличие своего профиля в аргументах опции --ids
 
-import os
 import argparse
+import os
+from getpass import getpass
 import vk_api
 
 from vkextractor import VKExtractor
@@ -25,7 +26,7 @@ def main():
                                'из под которой будут осуществляться запросы к API VK: ')
 
         if args.login is not None and args.password is None:
-            args.password = input('Введите пароль от учетной записи Вконтакте с логином ' + args.login + ": ")
+            args.password = getpass(prompt='Введите пароль от учетной записи Вконтакте с логином ' + args.login + ': ')
 
         if args.ids is None:
             args.ids = input('Введите ID пользователей, общих друзей которых необходимо найти')
