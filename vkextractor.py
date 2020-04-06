@@ -34,8 +34,8 @@ class VKExtractor:
                 if user['id'] == profile_id:
                     return month
 
-    def extract_year(self, profile_id, min_year, max_year, display_name):
-        for year in range(min_year, max_year + 1):
+    def extract_year(self, profile_id, year_from, year_to, display_name):
+        for year in range(year_from, year_to + 1):
             users = self.__vk.users.search(q=display_name, birth_year=year, count=1000)
             for user in users['items']:
                 if user['id'] == profile_id:
