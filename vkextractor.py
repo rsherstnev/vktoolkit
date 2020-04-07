@@ -2,7 +2,6 @@ import re
 import requests
 import vk_api
 
-
 class VKExtractor:
 
     def __init__(self, login, password):
@@ -21,25 +20,73 @@ class VKExtractor:
         return self.__vk.utils.resolveScreenName(screen_name=screen_name)['object_id']
 
     def extract_day(self, profile_id, display_name):
-        for day in range(1, 32):
-            users = self.__vk.users.search(q=display_name, birth_day=day, count=1000)
-            for user in users['items']:
+        for birth_day in range(1, 32):
+            users = self.__vk.execute(code='''
+                var container = [];
+                var offset = 0;
+                var probe = API.users.search({q:"''' + display_name + '''", birth_day:''' + str(birth_day) + ''',
+                                              count:1000, offset:offset});
+                container.push(probe);
+                offset = offset + 1000;
+                var iter = probe.count / 1000;
+                while (iter > 0)
+                {
+                    container.push(API.users.search({q:"''' + display_name + '''", birth_day:''' + str(birth_day) + ''',
+                                                     count:1000, offset:offset}));
+                    offset = offset + 1000;
+                    iter = iter - 1;
+                };
+                return container;
+            ''')
+            for user in users[0]['items']:
                 if user['id'] == profile_id:
-                    return day
+                    return birth_day
 
     def extract_month(self, profile_id, display_name):
-        for month in range(1, 13):
-            users = self.__vk.users.search(q=display_name, birth_month=month, count=1000)
-            for user in users['items']:
+        for birth_month in range(1, 13):
+            users = self.__vk.execute(code='''
+                var container = [];
+                var offset = 0;
+                var probe = API.users.search({q:"''' + display_name + '''", birth_month:''' + str(birth_month) + ''',
+                                              count:1000, offset:offset});
+                container.push(probe);
+                offset = offset + 1000;
+                var iter = probe.count / 1000;
+                while (iter > 0)
+                {
+                    container.push(API.users.search({q:"''' + display_name + '''", birth_month:''' + str(birth_month) + ''',
+                                                     count:1000, offset:offset}));
+                    offset = offset + 1000;
+                    iter = iter - 1;
+                };
+                return container;
+            ''')
+            for user in users[0]['items']:
                 if user['id'] == profile_id:
-                    return month
+                    return birth_month
 
     def extract_year(self, profile_id, year_from, year_to, display_name):
-        for year in range(year_from, year_to + 1):
-            users = self.__vk.users.search(q=display_name, birth_year=year, count=1000)
-            for user in users['items']:
+        for birth_year in range(year_from, year_to + 1):
+            users = self.__vk.execute(code='''
+                var container = [];
+                var offset = 0;
+                var probe = API.users.search({q:"''' + display_name + '''", birth_year:''' + str(birth_year) + ''',
+                                              count:1000, offset:offset});
+                container.push(probe);
+                offset = offset + 1000;
+                var iter = probe.count / 1000;
+                while (iter > 0)
+                {
+                    container.push(API.users.search({q:"''' + display_name + '''", birth_year:''' + str(birth_year) + ''',
+                                                     count:1000, offset:offset}));
+                    offset = offset + 1000;
+                    iter = iter - 1;
+                };
+                return container;
+            ''')
+            for user in users[0]['items']:
                 if user['id'] == profile_id:
-                    return year
+                    return birth_year
 
     def extract_status(self, profile_id, display_name):
         status_description = [
@@ -53,8 +100,24 @@ class VKExtractor:
             'в гражданском браке'
         ]
         for status in range(1, 9):
-            users = self.__vk.users.search(q=display_name, status=status, count=1000)
-            for user in users['items']:
+            users = self.__vk.execute(code='''
+                var container = [];
+                var offset = 0;
+                var probe = API.users.search({q:"''' + display_name + '''", status:''' + str(status) + ''',
+                                              count:1000, offset:offset});
+                container.push(probe);
+                offset = offset + 1000;
+                var iter = probe.count / 1000;
+                while (iter > 0)
+                {
+                    container.push(API.users.search({q:"''' + display_name + '''", status:''' + str(status) + ''',
+                                                     count:1000, offset:offset}));
+                    offset = offset + 1000;
+                    iter = iter - 1;
+                };
+                return container;
+            ''')
+            for user in users[0]['items']:
                 if user['id'] == profile_id:
                     return status_description[status - 1]
 
@@ -71,8 +134,24 @@ class VKExtractor:
             'Пастафарианство'
         ]
         for religion in religion_description:
-            users = self.__vk.users.search(q=display_name, religion=religion, count=1000)
-            for user in users['items']:
+            users = self.__vk.execute(code='''
+                var container = [];
+                var offset = 0;
+                var probe = API.users.search({q:"''' + display_name + '''", religion:"''' + religion + '''",
+                                              count:1000, offset:offset});
+                container.push(probe);
+                offset = offset + 1000;
+                var iter = probe.count / 1000;
+                while (iter > 0)
+                {
+                    container.push(API.users.search({q:"''' + display_name + '''", religion:"''' + religion + '''",
+                                                     count:1000, offset:offset}));
+                    offset = offset + 1000;
+                    iter = iter - 1;
+                };
+                return container;
+            ''')
+            for user in users[0]['items']:
                 if user['id'] == profile_id:
                     return religion
 
