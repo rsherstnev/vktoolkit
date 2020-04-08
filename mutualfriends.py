@@ -3,32 +3,45 @@
 # При этом не обязательно наличие своего профиля в аргументах опции --ids
 
 import argparse
-import os
 from getpass import getpass
+import os
+
 import vk_api
 
 from vkextractor import VKExtractor
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--login', '-l',
-                    help='Логин учётной записи, из под которой будут производиться запросы к API')
-parser.add_argument('--password', '-p',
-                    help='Пароль учётной записи, из под которой будут производиться запросы к API')
-parser.add_argument('--ids', '-i', nargs='+', help='ID пользователей, общих друзей которых нужно найти')
+HELP = '''Usage: mutualfriends.py [--login LOGIN] [--password PASSWORD] [--ids ID_1 ID_2...]
+
+Options:
+-h, --help          Вывести данную помощь.
+-l, --login         Логин учётной записи Вконтакте, из под которой будут производиться запросы к API VK.
+-p, --password      Пароль учётной записи Вконтакте, из под которой будут производиться запросы к API VK.
+-i, --ids           ID пользователей Вконтакте, общих друзей которых нужно найти.
+'''
+
+parser = argparse.ArgumentParser(add_help=False)
+parser.add_argument('-h', '--help', action='store_true')
+parser.add_argument('-l', '--login')
+parser.add_argument('-p', '--password')
+parser.add_argument('-i', '--ids', nargs='+')
 
 try:
     args = parser.parse_args()
 
-    if args.login is None:
+    if args.help:
+        print(HELP)
+        raise SystemExit
+
+    if not args.login:
         args.login = input('Введите логин учетной записи Вконтакте, '
                            'из под которой будут осуществляться запросы к API VK: ')
 
-    if args.login is not None and args.password is None:
+    if args.login and not args.password:
         args.password = getpass(prompt='Введите пароль от учетной записи Вконтакте с логином ' + args.login + ': ')
 
-    if args.ids is None:
-        args.ids = input('Введите ID пользователей, общих друзей которых необходимо найти')
+    if not args.ids:
+        args.ids = input('Введите через пробел ID пользователей, общих друзей которых необходимо найти: ').split()
 
     if len(args.ids) < 2:
         raise Exception("Для нахождения общих друзей необходимо минимум 2 профиля ВК!")
@@ -48,17 +61,23 @@ try:
     for mutual_friend in mutual_friends:
         print('https://vk.com/id' + str(mutual_friend), sep='\n')
 
+except KeyboardInterrupt:
+    pass
+
 except vk_api.exceptions.BadPassword:
     print('Введены невалидные учетные данные, повторите попытку')
-    raise SystemExit
 
 except vk_api.exceptions.ApiError as error:
     if error.code == 30:
         print("Один из профилей является закрытым по отношению к профилю, из под которого осуществляются запросы. "
               "Измените профиль в --login, либо закрытый профиль в --ids.")
-    if error.code == 113:
+    elif error.code == 113:
         print('Один из введенных ID не является валидным аккаунтом, повторите попытку')
-    raise SystemExit
+    else:
+        print('Ошибка ВК с кодом:', error.code)
+
+except Exception as error:
+    print(error)
 
 finally:
     if os.path.isfile("./vk_config.v2.json"):
