@@ -11,6 +11,10 @@ import vk_api
 from vkextractor import VKExtractor
 
 
+class MyException(Exception):
+    pass
+
+
 HELP = '''Usage: mutualfriends.py [--login LOGIN] [--password PASSWORD] [--ids ID_1 ID_2...]
 
 Options:
@@ -44,7 +48,7 @@ try:
         args.ids = input('Введите через пробел ID пользователей, общих друзей которых необходимо найти: ').split()
 
     if len(args.ids) < 2:
-        raise Exception("Для нахождения общих друзей необходимо минимум 2 профиля ВК!")
+        raise MyException("Для нахождения общих друзей необходимо минимум 2 профиля ВК!")
 
     extractor = VKExtractor(args.login, args.password)
 
@@ -76,7 +80,7 @@ except vk_api.exceptions.ApiError as error:
     else:
         print('Ошибка ВК с кодом:', error.code)
 
-except Exception as error:
+except MyException as error:
     print(error)
 
 finally:

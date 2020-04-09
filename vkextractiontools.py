@@ -9,6 +9,10 @@ import vk_api
 from vkextractor import VKExtractor
 
 
+class MyException(Exception):
+    pass
+
+
 HELP = '''Usage: vkextractiontools.py [--login LOGIN] [--password PASSWORD] [--id ID] [--day]
                             [--month] [--year] [--year-from YEAR_FROM] [--year-to YEAR_TO]
                             [--status] [--religion] [--reg-date]
@@ -26,7 +30,7 @@ Options:
 -t, --year-to       Каким годом заканчивать перебор. Значение по умолчанию - 2002.
 -s, --status        Извлечь семейное положение.
 -r, --religion      Извлечь мировоззрение.
---reg-date          Извлечь дату регистрации.
+    --reg-date      Извлечь дату регистрации.
 '''
 
 parser = argparse.ArgumentParser(add_help=False)
@@ -51,10 +55,10 @@ try:
         raise SystemExit
 
     if args.year_from < 1900:
-        raise Exception('Аргумент опции --year-from должен быть >= 1900')
+        raise MyException('Аргумент опции --year-from должен быть >= 1900')
 
     if args.year_from > args.year_to:
-        raise Exception('Аргумент опции --year-from должен быть <=  аргумента опции --year-to')
+        raise MyException('Аргумент опции --year-from должен быть <=  аргумента опции --year-to')
 
     if not args.login:
         args.login = input('Введите логин учетной записи Вконтакте, из под которой будут осуществляться запросы к API VK: ')
@@ -100,7 +104,7 @@ except vk_api.exceptions.ApiError as error:
     else:
         print('Ошибка ВК с кодом:', error.code)
 
-except Exception as error:
+except MyException as error:
     print(error)
 
 finally:
