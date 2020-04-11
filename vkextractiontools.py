@@ -103,7 +103,7 @@ try:
         print('Мировоззрение: ' + str(extractor.extract_value(profile_id, display_name, religion_description, 'religion')))
     if args.reg_date:
         date = VKExtractor.get_profile_registration_day(extractor.get_profile_id_by_screen_name(args.id))
-        print('Дата создания аккаунта: ' + date[2] + '.' + date[1] + '.' + date[0])
+        print(f'Дата создания аккаунта: {date[2]}.{date[1]}.{date[0]}')
 
 except KeyboardInterrupt:
     pass

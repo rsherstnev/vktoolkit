@@ -37,12 +37,12 @@ class VKExtractor:
                     iter = iter - 1;
                 }};
                 return container;
-            '''.format(display_name, extract_type, str(value)))
+            '''.format(display_name, extract_type, value))
             for user in users[0]['items']:
                 if user['id'] == profile_id:
                     return value
 
-    # Данный метод не подходит под паттерн extract_value ввиду особенности извлечения семейного положения
+    # Данный метод не подходит под паттерн extract_value ввиду особенностей извлечения семейного положения
     def extract_status(self, profile_id, display_name):
         status_description = [
             'не женат(не замужем)',
@@ -69,7 +69,7 @@ class VKExtractor:
                     iter = iter - 1;
                 }};
                 return container;
-            '''.format(display_name, str(status)))
+            '''.format(display_name, status))
             for user in users[0]['items']:
                 if user['id'] == profile_id:
                     return status_description[status - 1]
