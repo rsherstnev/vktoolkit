@@ -67,7 +67,7 @@ Cкрипт позволяет узнать общих друзей двух и 
 командного интерпретатора, их можно выпустить, тогда скрипт запросит учетные данные интерактивно.
 
 ### Примеры
-Вывести общих друзей профилей https://vk.com/rsherstnev, https://vk.com/degustatorvarenikov и https://vk.com/id1337228:
+Вывести общих друзей профилей https://vk.com/rsherstnev и https://vk.com/id1337228:
 ```
-mutualfriends.py --login +79632286969 --password yourverysecurepassword --ids rsherstnev degustatorvarenikov id1337228 
+mutualfriends.py --login +79632286969 --password yourverysecurepassword --ids rsherstnev id1337228 
 ```

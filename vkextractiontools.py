@@ -79,15 +79,14 @@ try:
     print('Цель:', display_name)
 
     if args.day:
-        print('День рождения: ' + str(extractor.extract_value(profile_id, display_name, range(1, 32), 'birth_day')))
+        print('День рождения:', extractor.extract_value(profile_id, display_name, range(1, 32), 'birth_day'))
     if args.month:
-        print('Месяц рождения: ' + str(extractor.extract_value(profile_id, display_name, range(1, 13), 'birth_month')))
+        print('Месяц рождения:', extractor.extract_value(profile_id, display_name, range(1, 13), 'birth_month'))
     if args.year:
-        print('Год рождения: ' + str(extractor.extract_value(profile_id, display_name,
-                                                             range(args.year_from, args.year_to + 1),
-                                                             'birth_year')))
+        print('Год рождения:', extractor.extract_value(profile_id, display_name, range(args.year_from, args.year_to + 1),
+                                                       'birth_year'))
     if args.status:
-        print('Семейное положение: ' + str(extractor.extract_status(profile_id, display_name)))
+        print('Семейное положение:', extractor.extract_status(profile_id, display_name))
     if args.religion:
         religion_description = [
             'Иудаизм',
@@ -100,7 +99,7 @@ try:
             'Светский гуманизм',
             'Пастафарианство'
         ]
-        print('Мировоззрение: ' + str(extractor.extract_value(profile_id, display_name, religion_description, 'religion')))
+        print('Мировоззрение:', extractor.extract_value(profile_id, display_name, religion_description, 'religion'))
     if args.reg_date:
         date = VKExtractor.get_profile_registration_day(extractor.get_profile_id_by_screen_name(args.id))
         print(f'Дата создания аккаунта: {date[2]}.{date[1]}.{date[0]}')
@@ -115,7 +114,7 @@ except vk_api.exceptions.ApiError as error:
     if error.code == 113:
         print('Аргументом опции --id является несуществующий профиль Вконтакте!')
     else:
-        print('Ошибка ВК с кодом:', error)
+        print('Ошибка ВК с кодом:', error.code)
 
 except MyException as error:
     print(error)

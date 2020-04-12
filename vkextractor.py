@@ -29,7 +29,7 @@ class VKExtractor:
                 var probe = API.users.search({{q:"{0}", {1}:"{2}", count:1000, offset:offset}});
                 container.push(probe);
                 offset = offset + 1000;
-                var iter = probe.count / 1000;
+                var iter = (probe.count / 1000) - 1;
                 while (iter > 0)
                 {{
                     container.push(API.users.search({{q:"{0}", {1}:"{2}", count:1000, offset:offset}}));
@@ -61,7 +61,7 @@ class VKExtractor:
                 var probe = API.users.search({{q:"{0}", status:{1}, count:1000, offset:offset}});
                 container.push(probe);
                 offset = offset + 1000;
-                var iter = probe.count / 1000;
+                var iter = (probe.count / 1000) - 1;
                 while (iter > 0)
                 {{
                     container.push(API.users.search({{q:"{0}", status:{1}, count:1000, offset:offset}}));
