@@ -1,0 +1,17 @@
+[project]
+name = "vktoolkit"
+version = "1.0.0"
+description = "Инструменты для работы с API ВКонтакте"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "vk-api>=11.10.0",
+    "requests>=2.34.0",
+]
+
+[project.scripts]
+mutualfriends = "mutualfriends:main"
+vkextractiontools = "vkextractiontools:main"
+
+[tool.uv]
+python-preference = "only-system"
